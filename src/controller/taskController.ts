@@ -8,42 +8,18 @@ const scheduleTaskController = async (
     res: Response
 ): Promise<any> => {
     // Fetch all documents from the collection
-    const tasks: any[] = await tasksModel.find({status: "Pending"});
 
-    let filteredUsers = tasks.filter((task) => {
-        return task.priority === 3;
-    });
 
-    try{
-        for (const task of tasks) {
+    try {
+        const tasks: any[] = await tasksModel.find({ status: "Pending" });
+
+        let filteredUsers = tasks.filter((task) => {
+            return task.priority === 3;
+        });
+        for (const task of filteredUsers) {
             // console.log(dateToCron(new Date(task.time)));
-            let time: string = "";
-            if (new Date(task.time).toString() === "Invalid Date") {
-                const time_of_recc = task.time.split(' ');
-                const recurranceTime: string = time_of_recc[1];
-                if(recurranceTime === 'minutes'){
-                    time = `*/${time_of_recc[0]} * * * *`;
-                }
-                if(recurranceTime === 'seconds'){
-                    time = `*/${time_of_recc[0]} * * * * *`;
-                }
-                if(recurranceTime === 'hours'){
-                    time = `* */${time_of_recc[0]} * * *`;
-                }
-                if(recurranceTime === 'days'){
-                    time = `* * */${time_of_recc[0]} * *`;
-                }
-                if(recurranceTime === 'months'){
-                    time = `* * * */${time_of_recc[0]} *`;
-                }
-                if(recurranceTime === 'weeks'){
-                    time = `* * * * */${time_of_recc[0]}`;
-                } 
-            }else{
-                time = dateToCron(new Date(task.time));
-            }
-            // console.log(time);
-    
+            let time: string = dateToCron(task.time);
+
             try {
                 cron.schedule(time, () => executeTask(task));
             } catch (error) {
@@ -53,18 +29,51 @@ const scheduleTaskController = async (
                 });
             }
         }
-    
+
+        filteredUsers = tasks.filter((task) => {
+            return task.priority === 2;
+        });
+        for (const task of filteredUsers) {
+            // console.log(dateToCron(new Date(task.time)));
+            let time: string = dateToCron(task.time);
+
+            try {
+                cron.schedule(time, () => executeTask(task));
+            } catch (error) {
+                return res.status(400).send({
+                    success: true,
+                    message: "Task scheduling not successfull",
+                });
+            }
+        }
+        filteredUsers = tasks.filter((task) => {
+            return task.priority === 1;
+        });
+        for (const task of filteredUsers) {
+            // console.log(dateToCron(new Date(task.time)));
+            let time: string = dateToCron(task.time);
+
+            try {
+                cron.schedule(time, () => executeTask(task));
+            } catch (error) {
+                return res.status(400).send({
+                    success: true,
+                    message: "Task scheduling not successfull",
+                });
+            }
+        }
+
         return res.status(200).send({
             success: true,
             message: "Task scheduled successfully",
         });
-    }catch(error){
+    } catch (error) {
         return res.status(500).send({
             success: true,
             message: "Task scheduling not successfull",
         });
     }
-    
+
 };
 
 const addTaskController = async (
@@ -90,8 +99,8 @@ const addTaskController = async (
         if (!priority) {
             return res.status(400).send({ message: "Priority is Required" });
         }
-        const priorityValue = [1 , 2 , 3];
-        if(priorityValue.indexOf(priority) === -1){
+        const priorityValue = [1, 2, 3];
+        if (priorityValue.indexOf(priority) === -1) {
             return res.status(400).send({ message: "Priority should be in the range 1-3 and must be number" });
         }
         const isEmail = await isValidEmail(email);
@@ -117,11 +126,11 @@ const addTaskController = async (
         if (recurring) {
             const recurranceTime: string = time.split(' ')[1];
             // console.log(recurranceTime);
-            const arr = ["seconds", "minutes", "hours", "days", "months","weeks"];
-            
+            const arr = ["seconds", "minutes", "hours", "days", "months", "weeks"];
+
             const subArr = arr.indexOf(recurranceTime);
             // console.log(subArr);
-            
+
             if (subArr === -1) {
                 return res.status(400).send({ message: `If reccuring, Please Enter time in format "--(time) minutes/seconds/hours/days/months/weeks" ` })
             }

@@ -3,6 +3,7 @@ import { addTaskController, scheduleTaskController, getAllTaskController } from 
 
 const taskRoute: Router = express.Router();
 
+//Routes
 taskRoute.get('/scheduletask', scheduleTaskController);
 
 taskRoute.post('/addtask', addTaskController);

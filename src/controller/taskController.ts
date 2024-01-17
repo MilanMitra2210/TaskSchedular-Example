@@ -7,12 +7,14 @@ const scheduleTaskController = async (
     req: Request,
     res: Response
 ): Promise<any> => {
-    // Fetch all documents from the collection
+    
 
 
     try {
+        // Fetch all documents from the collection which are pending
         const tasks: any[] = await tasksModel.find({ status: "Pending" });
 
+        // filtering higher priority
         let filteredUsers = tasks.filter((task) => {
             return task.priority === 3;
         });
@@ -63,7 +65,7 @@ const scheduleTaskController = async (
             }
         }
         
-        
+        //updating status to completed
         try{
             for (let i = 0; i < tasks.length; i++) {
                 const user = await tasksModel.updateOne({_id: tasks[0]._id}, { $set: { status: "Completed" } });
@@ -100,6 +102,7 @@ const addTaskController = async (
     const { task, recurring, email, time, priority } = req.body;
 
     try {
+        //validations
         if (!task) {
             return res.status(400).send({ message: "Task is Required" });
         }
@@ -127,8 +130,9 @@ const addTaskController = async (
         if (typeof (recurring) !== 'boolean') {
             return res.status(400).send({ message: "Please Enter Boolean value of Recurring" });
         }
-        console.log(new Date());
+        // console.log(new Date());
 
+        //validations according to: if recurring is true or not 
         if (!recurring) {
             const date = new Date(time);
 
@@ -152,7 +156,7 @@ const addTaskController = async (
             }
 
         }
-        // save
+        // saving in DB
         const user = await new tasksModel({
             task,
             recurring,
@@ -174,11 +178,14 @@ const addTaskController = async (
         });
     }
 };
+
+
 const getAllTaskController = async (
     req: Request,
     res: Response
 ): Promise<any> => {
     try {
+        //fetching all data
         const tasks: any[] = await tasksModel.find({});
         return res.status(200).json(tasks);
     } catch (error) {

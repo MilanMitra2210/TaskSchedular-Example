@@ -6,6 +6,7 @@ const isValidEmail = async (email: string): Promise<boolean> => {
 
   return await emailRegex.test(email);
 }
+// date to cron string conversion
 const dateToCron = (time: string): string => {
   let result: string = "";
   if (new Date(time).toString() === "Invalid Date") {
@@ -42,16 +43,6 @@ const dateToCron = (time: string): string => {
 
 
   return result;
-};
-//date to cron code conversion
-const dateToCron2 = (date: Date): string => {
-  const minutes = date.getMinutes();
-  const hours = date.getHours();
-  const days = date.getDate();
-  const months = date.getMonth() + 1;
-  const dayOfWeek = date.getDay();
-
-  return `${minutes} ${hours} ${days} ${months} ${dayOfWeek}`;
 };
 
 //execution of task

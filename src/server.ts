@@ -18,18 +18,8 @@ const app : Application = express();
 app.use(cors());
 app.use(express.json());
 
-
-
-
-
-
-
 // routes
 app.use('/api/v1/', taskRoute);
-
-
-
-
 
 app.get('/', (req: Request, res: Response ) => {// rest api
   res.send('Server running');

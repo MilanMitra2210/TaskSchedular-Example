@@ -1,7 +1,10 @@
 import express, { Router } from 'express';
-import { scheduleTaskController } from '../controller/taskController';
+import { addTaskController, scheduleTaskController } from '../controller/taskController';
 
 const taskRoute: Router = express.Router();
 
-taskRoute.post('/scheduletask', scheduleTaskController);
+taskRoute.get('/scheduletask', scheduleTaskController);
+
+taskRoute.post('/addtask', addTaskController);
+
 export default taskRoute;

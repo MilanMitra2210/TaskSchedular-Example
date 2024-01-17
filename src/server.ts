@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import cors from 'cors';
 import taskRoute from './routes/taskRoute';
 import connectDB from './config/db';
+import cron from "node-cron";
 
 
 // configure env

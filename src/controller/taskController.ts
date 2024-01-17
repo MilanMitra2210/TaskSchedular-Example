@@ -6,7 +6,7 @@ const scheduleTaskController = async (
     req: Request,
     res: Response
 ): Promise<any> => {
-    
+
 
 };
 
@@ -55,12 +55,14 @@ const addTaskController = async (
             time,
             priority
           }).save();
-        res.status(200).send({
+        return res.status(200).send({
             success: true,
             message: "Task Successfully Added",
         });
     } catch (error) {
-        res.status(500).send({
+        console.log(error);
+        
+        return res.status(500).send({
             success: false,
             message: "Error Occured",
             error,

@@ -1,34 +1,30 @@
 import mongoose, { Schema } from 'mongoose';
 
 const taskSchema = new Schema(
-  {
-    task: {
-      type: String,
-      required: true,
-      trim: true,
+    {
+        task: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        recurring: {
+            type: Boolean,
+            required: true,
+        },
+        email: {
+            type: String,
+            required: true,
+        },
+        time: {
+            type: Date,
+            required: true,
+        },
+        priority: {
+            type: Number,
+            required: true,
+        },
     },
-    recurring: {
-      type: Boolean,
-      required: true,
-      unique: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    time: {
-        type: Date,
-        required: true,
-        unique: true,
-    },
-    priority: {
-        type: Number,
-        required: true,
-        unique: true,
-    },
-  },
-  { timestamps: true }
+    { timestamps: true }
 );
 
 const tasksModel = mongoose.model('tasks', taskSchema);

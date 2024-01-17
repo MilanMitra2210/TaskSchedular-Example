@@ -2,12 +2,14 @@ import express, { Application, Request, Response } from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import taskRoute from './routes/taskRoute';
+import connectDB from './config/db';
 
 
 // configure env
 dotenv.config();
 
 // database config
+connectDB();
 
 // rest object
 const app : Application = express();

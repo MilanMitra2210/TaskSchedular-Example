@@ -21,7 +21,7 @@ const scheduleTaskController = async (
             let time: string = dateToCron(task.time);
 
             try {
-                cron.schedule(time, () => executeTask(task));
+                // cron.schedule(time, () => executeTask(task));
             } catch (error) {
                 return res.status(400).send({
                     success: true,
@@ -38,7 +38,7 @@ const scheduleTaskController = async (
             let time: string = dateToCron(task.time);
 
             try {
-                cron.schedule(time, () => executeTask(task));
+                // cron.schedule(time, () => executeTask(task));
             } catch (error) {
                 return res.status(400).send({
                     success: true,
@@ -54,7 +54,7 @@ const scheduleTaskController = async (
             let time: string = dateToCron(task.time);
 
             try {
-                cron.schedule(time, () => executeTask(task));
+                // cron.schedule(time, () => executeTask(task));
             } catch (error) {
                 return res.status(400).send({
                     success: true,
@@ -62,6 +62,21 @@ const scheduleTaskController = async (
                 });
             }
         }
+        // console.log(tasks);
+        // const existingUser = await tasksModel.updateOne({_id: "65a79e8f0b286b76d4c86cf0"}, { $set: { status: "Completed" } });
+        console.log("ok");
+        
+        
+        try{
+            for (let i = 0; i < tasks.length; i++) {
+                const user = await tasksModel.updateOne({_id: tasks[0]._id}, { $set: { status: "Completed" } });
+                console.log(tasks[0]._id);
+                
+            }
+        }catch(error){
+            
+        }
+        
 
         return res.status(200).send({
             success: true,

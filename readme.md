@@ -1,0 +1,1 @@
+## For running the thunder client collection we have to intsall Thunder Client Extension in vs code, attached a screenshot for reference

@@ -1,0 +1,70 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "TaskScheduler POSTMAN collection",
+    "dateExported": "2024-01-17T12:08:07.196Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "b59a9c15-7726-4a6a-a6be-a1fc1e87fb62",
+            "colId": "f458e6d0-3473-4b51-9de6-485e4da0a58a",
+            "containerId": "",
+            "name": "http://localhost:8080/api/v1/alltask",
+            "url": "http://localhost:8080/api/v1/alltask",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2024-01-17T12:07:24.777Z",
+            "modified": "2024-01-17T12:07:24.777Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "d3f4f7ed-9737-4299-a60c-df73eff027fa",
+            "colId": "f458e6d0-3473-4b51-9de6-485e4da0a58a",
+            "containerId": "",
+            "name": "http://localhost:8080/api/v1/alltask",
+            "url": "http://localhost:8080/api/v1/alltask",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2024-01-17T12:07:44.092Z",
+            "modified": "2024-01-17T12:07:44.092Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "d61e8590-be80-43de-bac6-219e52b6ead7",
+            "colId": "f458e6d0-3473-4b51-9de6-485e4da0a58a",
+            "containerId": "",
+            "name": "http://localhost:8080/api/v1/scheduletask",
+            "url": "http://localhost:8080/api/v1/scheduletask",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2024-01-17T12:07:52.428Z",
+            "modified": "2024-01-17T12:07:52.428Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "dee91982-d8cd-47e9-a5bd-f1b5d5121204",
+            "colId": "f458e6d0-3473-4b51-9de6-485e4da0a58a",
+            "containerId": "",
+            "name": "http://localhost:8080/api/v1/addtask",
+            "url": "http://localhost:8080/api/v1/addtask",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2024-01-17T12:07:59.164Z",
+            "modified": "2024-01-17T12:07:59.164Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"task\":\"Task 5\",\n  \"recurring\": true,\n  \"email\":\"milanmitra2204@gmail.com\",\n  \"time\":\"15 seconds\",\n  \"priority\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}

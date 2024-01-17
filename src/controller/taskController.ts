@@ -21,7 +21,7 @@ const scheduleTaskController = async (
             let time: string = dateToCron(task.time);
 
             try {
-                // cron.schedule(time, () => executeTask(task));
+                cron.schedule(time, () => executeTask(task));
             } catch (error) {
                 return res.status(400).send({
                     success: true,
@@ -38,7 +38,7 @@ const scheduleTaskController = async (
             let time: string = dateToCron(task.time);
 
             try {
-                // cron.schedule(time, () => executeTask(task));
+                cron.schedule(time, () => executeTask(task));
             } catch (error) {
                 return res.status(400).send({
                     success: true,
@@ -54,7 +54,7 @@ const scheduleTaskController = async (
             let time: string = dateToCron(task.time);
 
             try {
-                // cron.schedule(time, () => executeTask(task));
+                cron.schedule(time, () => executeTask(task));
             } catch (error) {
                 return res.status(400).send({
                     success: true,
@@ -62,9 +62,6 @@ const scheduleTaskController = async (
                 });
             }
         }
-        // console.log(tasks);
-        // const existingUser = await tasksModel.updateOne({_id: "65a79e8f0b286b76d4c86cf0"}, { $set: { status: "Completed" } });
-        console.log("ok");
         
         
         try{
@@ -74,6 +71,10 @@ const scheduleTaskController = async (
                 
             }
         }catch(error){
+            return res.status(500).send({
+                success: true,
+                message: "Task scheduled but, DB not updated",
+            });
             
         }
         
@@ -173,6 +174,21 @@ const addTaskController = async (
         });
     }
 };
+const getAllTaskController = async (
+    req: Request,
+    res: Response
+): Promise<any> => {
+    try {
+        const tasks: any[] = await tasksModel.find({});
+        return res.status(200).json(tasks);
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: "Data cant be fetched, Server error",
+            error,
+        });
+    }
+}
 
 
-export { scheduleTaskController, addTaskController };
+export { scheduleTaskController, addTaskController, getAllTaskController };

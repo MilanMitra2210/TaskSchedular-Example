@@ -1,13 +1,70 @@
 import { Request, Response } from "express";
 import tasksModel from "../models/tasksModel";
-import { isValidEmail } from "../helper/taskHelper";
+import { dateToCron, executeTask, isValidEmail } from "../helper/taskHelper";
+import cron from "node-cron";
 
 const scheduleTaskController = async (
     req: Request,
     res: Response
 ): Promise<any> => {
+    // Fetch all documents from the collection
+    const tasks: any[] = await tasksModel.find({status: "Pending"});
 
+    let filteredUsers = tasks.filter((task) => {
+        return task.priority === 3;
+    });
 
+    try{
+        for (const task of tasks) {
+            // console.log(dateToCron(new Date(task.time)));
+            let time: string = "";
+            if (new Date(task.time).toString() === "Invalid Date") {
+                const time_of_recc = task.time.split(' ');
+                const recurranceTime: string = time_of_recc[1];
+                if(recurranceTime === 'minutes'){
+                    time = `*/${time_of_recc[0]} * * * *`;
+                }
+                if(recurranceTime === 'seconds'){
+                    time = `*/${time_of_recc[0]} * * * * *`;
+                }
+                if(recurranceTime === 'hours'){
+                    time = `* */${time_of_recc[0]} * * *`;
+                }
+                if(recurranceTime === 'days'){
+                    time = `* * */${time_of_recc[0]} * *`;
+                }
+                if(recurranceTime === 'months'){
+                    time = `* * * */${time_of_recc[0]} *`;
+                }
+                if(recurranceTime === 'weeks'){
+                    time = `* * * * */${time_of_recc[0]}`;
+                } 
+            }else{
+                time = dateToCron(new Date(task.time));
+            }
+            // console.log(time);
+    
+            try {
+                cron.schedule(time, () => executeTask(task));
+            } catch (error) {
+                return res.status(400).send({
+                    success: true,
+                    message: "Task scheduling not successfull",
+                });
+            }
+        }
+    
+        return res.status(200).send({
+            success: true,
+            message: "Task scheduled successfully",
+        });
+    }catch(error){
+        return res.status(500).send({
+            success: true,
+            message: "Task scheduling not successfull",
+        });
+    }
+    
 };
 
 const addTaskController = async (
@@ -21,7 +78,7 @@ const addTaskController = async (
         if (!task) {
             return res.status(400).send({ message: "Task is Required" });
         }
-        if (!recurring) {
+        if (recurring == undefined) {
             return res.status(400).send({ message: "Recurring value is Required" });
         }
         if (!email) {
@@ -33,20 +90,43 @@ const addTaskController = async (
         if (!priority) {
             return res.status(400).send({ message: "Priority is Required" });
         }
-        const date = new Date(time);
-        if(new Date(date).toString() === "Invalid Date" ){
-            return res.status(400).send({ message: "Please Enter Correct Time" })
+        const priorityValue = [1 , 2 , 3];
+        if(priorityValue.indexOf(priority) === -1){
+            return res.status(400).send({ message: "Priority should be in the range 1-3 and must be number" });
         }
-
         const isEmail = await isValidEmail(email);
         if (!isEmail) {
             return res.status(400).send({ message: "Please Enter Correct Email" });
         }
-        
-        if( typeof(recurring) !==  'boolean'){
+
+        if (typeof (recurring) !== 'boolean') {
             return res.status(400).send({ message: "Please Enter Boolean value of Recurring" });
         }
+        console.log(new Date());
 
+        if (!recurring) {
+            const date = new Date(time);
+
+            if (new Date(date).toString() === "Invalid Date") {
+                return res.status(400).send({ message: "If not reccuring, Please Enter Correct Date and time" })
+            }
+            if (date <= (new Date())) {
+                return res.status(400).send({ message: "The Date must be Bigger or Equal to today date" })
+            }
+        }
+        if (recurring) {
+            const recurranceTime: string = time.split(' ')[1];
+            // console.log(recurranceTime);
+            const arr = ["seconds", "minutes", "hours", "days", "months","weeks"];
+            
+            const subArr = arr.indexOf(recurranceTime);
+            // console.log(subArr);
+            
+            if (subArr === -1) {
+                return res.status(400).send({ message: `If reccuring, Please Enter time in format "--(time) minutes/seconds/hours/days/months/weeks" ` })
+            }
+
+        }
         // save
         const user = await new tasksModel({
             task,
@@ -54,19 +134,19 @@ const addTaskController = async (
             email,
             time,
             priority
-          }).save();
+        }).save();
         return res.status(200).send({
             success: true,
             message: "Task Successfully Added",
         });
     } catch (error) {
         console.log(error);
-        
+
         return res.status(500).send({
             success: false,
             message: "Error Occured",
             error,
-          });
+        });
     }
 };
 

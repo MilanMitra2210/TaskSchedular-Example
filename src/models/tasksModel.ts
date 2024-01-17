@@ -16,13 +16,18 @@ const taskSchema = new Schema(
             required: true,
         },
         time: {
-            type: Date,
+            type: String,
             required: true,
         },
         priority: {
             type: Number,
             required: true,
+            enum: [1, 2, 3],
         },
+        status:{
+            type: String,
+            default: "Pending",
+        }
     },
     { timestamps: true }
 );
